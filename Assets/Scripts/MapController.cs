@@ -58,9 +58,9 @@ namespace Assets.Scripts
         }
 
         public void OnDrawGizmos() {
-            Gizmos.DrawSphere(cameraOrigin, 1.0f);
-            Gizmos.DrawSphere(cameraTarget, 1.0f);
-            Gizmos.DrawLine(cameraOrigin, cameraTarget);
+            //Gizmos.DrawSphere(cameraOrigin, 1.0f);
+            //Gizmos.DrawSphere(cameraTarget, 1.0f);
+            //Gizmos.DrawLine(cameraOrigin, cameraTarget);
         }
 
         // Update is called once per frame

@@ -1,4 +1,5 @@
-﻿using MomenTFS;
+﻿using Assets.Scripts.Objects;
+using MomenTFS;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -7,6 +8,9 @@ public class BackgroundController : MonoBehaviour
 {
     private RoomData roomData;
     private Texture2D background;
+    private List<GameObject> backgroundImages;
+
+    public GameObject backgroundImagePrefab;
 
     // Start is called before the first frame update
     void Start() {
@@ -64,8 +68,26 @@ public class BackgroundController : MonoBehaviour
         background.Apply();
 
         this.GetComponent<Renderer>().material.mainTexture = background;
-        this.transform.localScale
-            = new Vector3(roomData.TFSData.ImageSize.X / (float)roomData.TFSData.ImageSize.Y, 1);
+        this.transform.localScale = new Vector3(
+            roomData.TFSData.ImageSize.X / (float)roomData.TFSData.ImageSize.Y, 1, 1);
+
+        backgroundImages = new List<GameObject>();
+        Vector2 mapDimensions
+            = new Vector2(roomData.TFSData.ImageSize.X, (float)roomData.TFSData.ImageSize.Y);
+
+        for (int i = 0; i < roomData.MAPData.Objects.Instances.Length; ++i) {
+            BackgroundImageData data = new BackgroundImageData(
+                roomData.MAPData.TIMImages.ToArray(),
+                roomData.MAPData.Objects.Objects,
+                roomData.MAPData.Objects.Instances[i],
+                mapDimensions);
+
+            GameObject newBackgroundImage = Instantiate(backgroundImagePrefab);
+            newBackgroundImage.transform.parent = this.transform;
+            newBackgroundImage.GetComponent<BackgroundImageController>().Initialise(data);
+
+            backgroundImages.Add(newBackgroundImage);
+        }
     }
 
     private static Color SystemColorToUnityColor(System.Drawing.Color color) {

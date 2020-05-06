@@ -39,11 +39,6 @@ namespace Assets.Scripts
             newUV = new List<Vector2>();
         }
 
-        public void OnDrawGizmos() {
-            Gizmos.DrawSphere(Vector3.zero, 1.0f);
-            Gizmos.DrawSphere(new Vector3((Width - 1) * scale, 0, (Length - 1) * scale), 1.0f);
-        }
-
         public void GenerateMesh(CollisionMapData mapData) {
             for (int x = 0; x < Width; ++x) {
                 for (int y = 0; y < Height; ++y) {
