@@ -10,7 +10,7 @@ namespace Assets.Scripts.Objects
     {
         public Texture2D[] Textures;
         public Vector3[] Positions;
-        public short[] Durations;
+        public float[] Durations;
         public Vector2 mapDimensions;
 
         public BackgroundImageData(
@@ -20,7 +20,7 @@ namespace Assets.Scripts.Objects
                 Vector2 mapDimensions) {
             Textures = new Texture2D[8];
             Positions = new Vector3[8];
-            Durations = new short[8];
+            Durations = new float[8];
             this.mapDimensions = mapDimensions;
 
             var aspectRatio = mapDimensions.x / mapDimensions.y;
@@ -31,18 +31,22 @@ namespace Assets.Scripts.Objects
                 if (objectIndex < 0) {
                     Textures[i] = null;
                     Positions[i] = Vector3.zero;
-                    Durations[i] = mapObjectInstance.AnimationDuration[i];
+                    Durations[i] = mapObjectInstance.AnimationDuration[i] * 0.06f;
                 } else {
                     MAPObject mapObject = mapObjects[objectIndex];
                     if (mapObject.Z > 0) {
                         Debug.Log(mapObject.Z);
                     }
                     Textures[i] = getTextureFromTIMImages(timImages, mapObject);
+                    //Positions[i] = new Vector3(
+                    //    (-0.5f + (mapObjectInstance.X / mapDimensions.x)) * aspectRatio,
+                    //    0.5f - (mapObjectInstance.Y / mapDimensions.y),
+                    //    mapObject.Z - 0.5f);
                     Positions[i] = new Vector3(
                         (-0.5f + (mapObjectInstance.X / mapDimensions.x)) * aspectRatio,
                         0.5f - (mapObjectInstance.Y / mapDimensions.y),
-                        mapObject.Z - 0.5f);
-                    Durations[i] = mapObjectInstance.AnimationDuration[i];
+                        50.0f - (mapObject.Z / 10000f));
+                    Durations[i] = mapObjectInstance.AnimationDuration[i] * 0.06f;
                 }
             }
         }
@@ -72,8 +76,7 @@ namespace Assets.Scripts.Objects
                         new Color(
                             currentColor.R / 255f,
                             currentColor.G / 255f,
-                            currentColor.B / 255f,
-                            currentColor.A / 255f));
+                            currentColor.B / 255f)); 
                 }
             }
 
