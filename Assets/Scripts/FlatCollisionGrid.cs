@@ -18,7 +18,7 @@ namespace Assets.Scripts
 
         private float textureUnit = 0.25f;
 
-        public void Generate(int xPosition, int yPosition, float scale, CollisionType[,] collisionMap) {
+        public void Generate(float xPosition, float yPosition, float scale, CollisionType[,] collisionMap) {
             newVertices = new List<Vector3>();
             newTriangles = new List<int>();
             newUV = new List<Vector2>();

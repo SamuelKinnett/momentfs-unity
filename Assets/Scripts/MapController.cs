@@ -27,6 +27,10 @@ namespace Assets.Scripts
         public Vector3 cameraTarget;
 
         public float zoom;
+        public float stretchX = 1.0f;
+        public float stretchY = 1.0f;
+
+        private float aspectRatio;
 
         // Start is called before the first frame update
         void Start() {
@@ -40,9 +44,12 @@ namespace Assets.Scripts
             cameraOrigin = (roomData.MAPData.Settings.CameraOrigin.ToVector3() / 10f);
             cameraTarget = (roomData.MAPData.Settings.CameraTranslation.ToVector3() / 10f);
 
+            Debug.Log(cameraOrigin);
+            Debug.Log(cameraTarget);
+
             camera.transform.position = cameraOrigin;
             camera.transform.LookAt(cameraTarget);
-            //zoom = roomData.MAPData.Settings.Zoom;
+            zoom = roomData.MAPData.Settings.Zoom;
             //camera.transform.position += ((cameraTarget - cameraOrigin).normalized * (roomData.MAPData.Settings.Zoom)) / 10f;
             //camera.transform.rotation = Quaternion.Euler(roomData.MAPData.Settings.CameraTranslation.ToVector3());
 
@@ -54,19 +61,22 @@ namespace Assets.Scripts
             //collisionMeshController.Initialise(100, 10, 100, 2);
             //collisionMeshController.GenerateMesh(collisionMapData);
 
-            flatCollisionGrid.Generate(-100, -100, 2, roomData.MAPData.Collision.CollisionMap);
+            flatCollisionGrid.Generate(-(zoom / 2.0f), -(zoom / 2.0f), zoom / 100f, roomData.MAPData.Collision.CollisionMap);
+            aspectRatio = roomData.TFSData.ImageSize.X / (float)roomData.TFSData.ImageSize.Y;
         }
 
         public void OnDrawGizmos() {
-            //Gizmos.DrawSphere(cameraOrigin, 1.0f);
-            //Gizmos.DrawSphere(cameraTarget, 1.0f);
-            //Gizmos.DrawLine(cameraOrigin, cameraTarget);
+            Gizmos.DrawSphere(cameraOrigin, 1.0f);
+            Gizmos.DrawSphere(cameraTarget * stretchX, 1.0f);
+            Gizmos.DrawLine(cameraOrigin, cameraTarget * stretchX);
         }
 
         // Update is called once per frame
         void Update() {
-            camera.transform.position = cameraOrigin + (cameraTarget - cameraOrigin).normalized * (zoom / 10f);
-            camera.transform.LookAt(cameraTarget);
+            camera.transform.position = cameraOrigin;
+            camera.transform.LookAt(cameraTarget * stretchX);
+
+            flatCollisionGrid.transform.localScale = new Vector3(stretchX, 1, stretchX);
         }
     }
 }
