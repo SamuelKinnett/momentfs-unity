@@ -2,9 +2,6 @@
 using Assets.Scripts.Objects;
 using MomenTFS;
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 namespace Assets.Scripts
@@ -41,28 +38,24 @@ namespace Assets.Scripts
             roomData = new RoomReader().ReadRoomData($"{mapFilepath}.TFS", $"{mapFilepath}.MAP");
             camera = Camera.main;
 
-            cameraOrigin = (roomData.MAPData.Settings.CameraOrigin.ToVector3() / 10f);
-            cameraTarget = (roomData.MAPData.Settings.CameraTranslation.ToVector3() / 10f);
+            cameraOrigin = (roomData.MAPData.Settings.CameraOrigin.ToVector3() / 100f);
 
             Debug.Log(cameraOrigin);
             Debug.Log(cameraTarget);
 
             camera.transform.position = cameraOrigin;
-            camera.transform.LookAt(cameraTarget);
-            zoom = roomData.MAPData.Settings.Zoom;
-            //camera.transform.position += ((cameraTarget - cameraOrigin).normalized * (roomData.MAPData.Settings.Zoom)) / 10f;
-            //camera.transform.rotation = Quaternion.Euler(roomData.MAPData.Settings.CameraTranslation.ToVector3());
+            camera.transform.LookAt(new Vector3(0, 0, 0));
+            zoom = roomData.MAPData.Settings.Zoom / 4096f / 10f;
 
             backgroundController.Initialise(roomData);
 
             var collisionMapData
                 = new CollisionMapData(roomData.MAPData.Collision.CollisionMap, 3);
-            //collisionMesh.transform.position = new Vector3(-100, 0, -100);
-            //collisionMeshController.Initialise(100, 10, 100, 2);
-            //collisionMeshController.GenerateMesh(collisionMapData);
 
-            flatCollisionGrid.Generate(-(zoom / 2.0f), -(zoom / 2.0f), zoom / 100f, roomData.MAPData.Collision.CollisionMap);
-            aspectRatio = roomData.TFSData.ImageSize.X / (float)roomData.TFSData.ImageSize.Y;
+            float collisionMapSize = 10f * zoom;
+
+            aspectRatio = 1.0f;
+            flatCollisionGrid.Generate(collisionMapSize, aspectRatio, roomData.MAPData.Collision.CollisionMap);
         }
 
         public void OnDrawGizmos() {
@@ -74,9 +67,10 @@ namespace Assets.Scripts
         // Update is called once per frame
         void Update() {
             camera.transform.position = cameraOrigin;
-            camera.transform.LookAt(cameraTarget * stretchX);
+            camera.transform.LookAt(new Vector3(0, 0, 0));
 
-            flatCollisionGrid.transform.localScale = new Vector3(stretchX, 1, stretchX);
+            float collisionMapSize = 10f * zoom;
+            flatCollisionGrid.Generate(collisionMapSize, aspectRatio, roomData.MAPData.Collision.CollisionMap);
         }
     }
 }

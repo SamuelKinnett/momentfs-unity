@@ -18,17 +18,22 @@ namespace Assets.Scripts
 
         private float textureUnit = 0.25f;
 
-        public void Generate(float xPosition, float yPosition, float scale, CollisionType[,] collisionMap) {
+        public void Generate(float scale, float aspectRatio, CollisionType[,] collisionMap) {
             newVertices = new List<Vector3>();
             newTriangles = new List<int>();
             newUV = new List<Vector2>();
             faceCount = 0;
 
+            float xPosition = -((collisionMap.GetLength(0) * scale * aspectRatio) / 2.0f);
+            float yPosition = -((collisionMap.GetLength(1) * scale) / 2.0f);
+
+            Debug.Log(string.Format("xPosition: {0}, yPosition: {1}", xPosition, yPosition));
+
             for (int x = 0; x < collisionMap.GetLength(0); ++x) {
                 for (int y = 0; y < collisionMap.GetLength(1); ++y) {
                     CollisionType collisionType = collisionMap[x, collisionMap.GetLength(1) - 1 - y];
 
-                    CreateTile(xPosition + x * scale, yPosition + y * scale, scale, collisionType);
+                    CreateTile(xPosition + x * scale * aspectRatio, yPosition + y * scale, scale * aspectRatio, scale, collisionType);
                 }
             }
 
@@ -54,12 +59,12 @@ namespace Assets.Scripts
             faceCount = 0;
         }
 
-        private void CreateTile(float x, float z, float scale, CollisionType collisionType) {
+        private void CreateTile(float x, float z, float xScale, float yScale, CollisionType collisionType) {
             // Add the new vertices
             newVertices.Add(new Vector3(x, 0, z));
-            newVertices.Add(new Vector3(x, 0, z + scale));
-            newVertices.Add(new Vector3(x + scale, 0, z + scale));
-            newVertices.Add(new Vector3(x + scale, 0, z));
+            newVertices.Add(new Vector3(x, 0, z + yScale));
+            newVertices.Add(new Vector3(x + xScale, 0, z + yScale));
+            newVertices.Add(new Vector3(x + xScale, 0, z));
 
             ApplyTextureToFace(collisionType);
         }

@@ -260,13 +260,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 316022547}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3e5aa8f40bbd20b4fb760e8b44e41b8b, type: 3}
+  m_Script: {fileID: 11500000, guid: e3a0478832bad6e448e44b6f63695475, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   CollisionMesh: {fileID: 1904875038}
   FlatMesh: {fileID: 514174298}
   BackgroundController: {fileID: 66992702}
-  mapFilepath: C:\Users\kense\Documents\Hacking\PS1\Games\Digimon World\MAP\MAP1\MAYO01
+  mapFilepath: C:\Users\kense\Documents\Hacking\PS1\Games\Digimon World\MAP\MAP1\MAYO03
   cameraOrigin: {x: 0, y: 0, z: 0}
   cameraTarget: {x: 0, y: 0, z: 0}
   zoom: 0
@@ -587,7 +587,7 @@ Camera:
     height: 1
   near clip plane: 0.3
   far clip plane: 1000
-  field of view: 45
+  field of view: 15
   orthographic: 0
   orthographic size: 5
   m_Depth: 0
@@ -826,7 +826,7 @@ Camera:
     width: 1
     height: 1
   near clip plane: 0.3
-  far clip plane: 100
+  far clip plane: 1000
   field of view: 60
   orthographic: 1
   orthographic size: 0.5
